@@ -3,9 +3,11 @@ const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
 
 let lang = "ar";
-let currentCVTemplate = "classic";
-
 const pages = ["home", "tools", "saved"];
+
+// ==============================
+// TOAST
+// ==============================
 
 function toast(msg) {
   const t = $("#toast");
@@ -17,9 +19,16 @@ function toast(msg) {
   setTimeout(() => t.classList.remove("show"), 2600);
 }
 
+// ==============================
+// PAGE NAVIGATION
+// ==============================
+
 function go(page) {
+  if (!pages.includes(page)) return;
+
   pages.forEach(p => {
     const element = $("#" + p + "Page");
+
     if (element) {
       element.classList.toggle("hidden", p !== page);
     }
@@ -40,64 +49,127 @@ function go(page) {
   }
 
   $("#sidebar")?.classList.remove("open");
+
   window.scrollTo(0, 0);
 }
 
 $$("[data-page]").forEach(b => {
-  b.addEventListener("click", () => go(b.dataset.page));
+  b.addEventListener("click", e => {
+    e.preventDefault();
+    go(b.dataset.page);
+  });
 });
 
-$("#menuBtn").onclick = () => {
-  $("#sidebar").classList.toggle("open");
-};
+// ==============================
+// MOBILE MENU
+// ==============================
 
-$("#themeBtn").onclick = () => {
-  document.body.classList.toggle("dark");
+if ($("#menuBtn")) {
+  $("#menuBtn").onclick = () => {
+    $("#sidebar")?.classList.toggle("open");
+  };
+}
 
-  $("#themeBtn b").textContent =
-    document.body.classList.contains("dark")
-      ? (lang === "ar" ? "الوضع الفاتح" : "Light mode")
-      : (lang === "ar" ? "الوضع الليلي" : "Dark mode");
-};
+// ==============================
+// DARK / LIGHT MODE
+// ==============================
 
-$("#langBtn").onclick = () => {
-  lang = lang === "ar" ? "en" : "ar";
+if ($("#themeBtn")) {
+  $("#themeBtn").onclick = () => {
+    document.body.classList.toggle("dark");
 
-  document.documentElement.lang = lang;
-  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    const isDark = document.body.classList.contains("dark");
+    const themeText = $("#themeBtn b");
 
-  $$("[data-ar][data-en]").forEach(el => {
-    el.innerHTML = el.dataset[lang];
-  });
+    if (themeText) {
+      themeText.textContent = isDark
+        ? (lang === "ar" ? "الوضع الفاتح" : "Light mode")
+        : (lang === "ar" ? "الوضع الليلي" : "Dark mode");
+    }
+  };
+}
 
-  $("#langBtn b").textContent =
-    lang === "ar" ? "English" : "العربية";
+// ==============================
+// LANGUAGE
+// ==============================
 
-  go("home");
-};
+if ($("#langBtn")) {
+  $("#langBtn").onclick = () => {
+    lang = lang === "ar" ? "en" : "ar";
 
-$("#logoutBtn").onclick = () => {
-  if (confirm(lang === "ar" ? "تأكيد تسجيل الخروج؟" : "Sign out?")) {
-    toast(
-      lang === "ar"
-        ? "تم إنهاء العرض التجريبي. اربط نظام تسجيل الدخول قبل النشر."
-        : "Demo session ended. Connect authentication before launch."
-    );
-  }
-};
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+    $$("[data-ar][data-en]").forEach(el => {
+      el.innerHTML = el.dataset[lang];
+    });
+
+    $$("[data-ar-placeholder][data-en-placeholder]").forEach(el => {
+      el.placeholder = lang === "ar"
+        ? el.dataset.arPlaceholder
+        : el.dataset.enPlaceholder;
+    });
+
+    const langText = $("#langBtn b");
+    if (langText) {
+      langText.textContent =
+        lang === "ar" ? "English" : "العربية";
+    }
+
+    const themeText = $("#themeBtn b");
+
+    if (themeText) {
+      const isDark = document.body.classList.contains("dark");
+
+      themeText.textContent = isDark
+        ? (lang === "ar" ? "الوضع الفاتح" : "Light mode")
+        : (lang === "ar" ? "الوضع الليلي" : "Dark mode");
+    }
+
+    go("home");
+  };
+}
+
+// ==============================
+// LOGOUT
+// ==============================
+
+if ($("#logoutBtn")) {
+  $("#logoutBtn").onclick = () => {
+    if (confirm(lang === "ar" ? "تأكيد تسجيل الخروج؟" : "Sign out?")) {
+      toast(
+        lang === "ar"
+          ? "تم إنهاء العرض التجريبي. اربط نظام تسجيل الدخول قبل النشر."
+          : "Demo session ended. Connect authentication before launch."
+      );
+    }
+  };
+}
+
+// ==============================
+// MODAL
+// ==============================
 
 const modal = $("#modal");
 const mc = $("#modalContent");
 
-$("#modalClose").onclick = () => {
-  modal.classList.add("hidden");
-};
-
-modal.addEventListener("click", e => {
-  if (e.target === modal) {
+if ($("#modalClose") && modal) {
+  $("#modalClose").onclick = () => {
     modal.classList.add("hidden");
-  }
-});
+  };
+}
+
+if (modal) {
+  modal.addEventListener("click", e => {
+    if (e.target === modal) {
+      modal.classList.add("hidden");
+    }
+  });
+}
+
+// ==============================
+// SECURITY HELPER
+// ==============================
 
 function safe(value) {
   return String(value ?? "").replace(/[&<>"']/g, char => ({
@@ -109,146 +181,258 @@ function safe(value) {
   })[char]);
 }
 
-// أسماء القوالب
-const cvTemplates = {
-  classic: "القالب الكلاسيكي",
-  modern: "القالب العصري",
-  minimal: "القالب البسيط"
-};
+// ==============================
+// CV TEMPLATE CSS
+// ==============================
 
-// تنسيقات القوالب داخل الموقع وملف PDF
 function getCVTemplateCSS() {
   return `
-    .cv-template-classic {
-      font-family: Arial, Tahoma, sans-serif;
-      color: #222;
-      border: 1px solid #ddd;
-      padding: 28px;
-      background: #fff;
-    }
-
-    .cv-template-classic h2 {
-      color: #243b55;
-      border-bottom: 2px solid #243b55;
-      padding-bottom: 12px;
-    }
-
-    .cv-template-classic h3 {
-      color: #243b55;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 5px;
-    }
-
-    .cv-template-modern {
-      font-family: Arial, Tahoma, sans-serif;
-      color: #263445;
-      border: 1px solid #dce5ef;
-      border-top: 7px solid #557da8;
-      padding: 28px;
-      background: #f8fbff;
-    }
-
-    .cv-template-modern h2 {
-      color: #315f8d;
-      font-size: 30px;
-      letter-spacing: .5px;
-    }
-
-    .cv-template-modern h3 {
-      color: #426e98;
-      background: #e9f1f9;
-      padding: 7px 10px;
-      border-radius: 5px;
-    }
-
-    .cv-template-minimal {
-      font-family: Arial, Tahoma, sans-serif;
-      color: #333;
-      padding: 28px;
-      background: #fff;
-      border: none;
-    }
-
-    .cv-template-minimal h2 {
-      color: #222;
-      font-size: 28px;
-      font-weight: 600;
-      text-align: start !important;
-      border-bottom: 1px solid #aaa;
-      padding-bottom: 12px;
-    }
-
-    .cv-template-minimal h3 {
-      color: #555;
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .cv-template-minimal hr {
-      border-top: 1px solid #bbb;
-    }
-
-    .cv-template-classic,
-    .cv-template-modern,
-    .cv-template-minimal {
+    .cv-sheet {
+      width: 100%;
       max-width: 800px;
       margin: 15px auto;
-      line-height: 1.9;
+      padding: 30px 34px;
+      background: #fff;
+      color: #171717;
+      border: 1px solid #ddd;
+      font-family: Arial, Tahoma, sans-serif;
+      font-size: 13px;
+      line-height: 1.55;
+      direction: ltr;
+      text-align: left;
       overflow-wrap: anywhere;
+      box-sizing: border-box;
     }
 
-    .cv-template-classic p,
-    .cv-template-modern p,
-    .cv-template-minimal p {
+    .cv-title {
+      text-align: center;
+      font-size: 23px;
+      font-variant: small-caps;
+      font-weight: bold;
+      margin: 0 0 22px;
+    }
+
+    .cv-header {
+      display: flex;
+      flex-direction: row;
+      gap: 22px;
+      align-items: flex-start;
+      border-bottom: 1px solid #555;
+      padding-bottom: 18px;
+      min-height: 145px;
+    }
+
+    .cv-photo {
+      order: 2;
+      flex: 0 0 112px;
+      width: 112px;
+      height: 132px;
+      object-fit: cover;
+      border: 0;
+    }
+
+    .cv-person {
+      order: 1;
+      flex: 1;
+      min-width: 0;
+      padding-top: 30px;
+    }
+
+    .cv-person h2 {
+      font-size: 15px;
+      margin: 0 0 2px;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    .cv-person h3 {
+      font-size: 13px;
+      margin: 0 0 2px;
+      font-weight: normal;
+    }
+
+    .cv-contact {
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .cv-section {
+      padding: 13px 0 12px;
+      border-bottom: 1px solid #777;
+      break-inside: avoid;
+    }
+
+    .cv-section h3 {
+      margin: 0 0 5px;
+      font-size: 13px;
+      font-weight: bold;
+      text-transform: none;
+    }
+
+    .cv-entries {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .cv-entry {
+      display: grid;
+      grid-template-columns: 105px minmax(0, 1fr);
+      gap: 15px;
+      align-items: start;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .cv-entry::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .cv-date {
+      font-weight: normal;
       white-space: pre-wrap;
-      overflow-wrap: anywhere;
+    }
+
+    .cv-description {
+      white-space: pre-wrap;
+    }
+
+    @media(max-width:600px) {
+      .cv-sheet {
+        padding: 18px;
+      }
+
+      .cv-header {
+        gap: 12px;
+      }
+
+      .cv-photo {
+        flex-basis: 85px;
+        width: 85px;
+        height: 105px;
+      }
+
+      .cv-person {
+        padding-top: 10px;
+      }
+
+      .cv-entry {
+        grid-template-columns: 85px minmax(0, 1fr);
+        gap: 8px;
+      }
+    }
+
+    @page {
+      size: A4;
+      margin: 15mm;
     }
 
     @media print {
-      .cv-template-classic,
-      .cv-template-modern,
-      .cv-template-minimal {
-        border-radius: 0;
-        box-shadow: none;
+      .cv-sheet {
+        border: 0;
+        margin: 0;
+        max-width: none;
+        width: 100%;
+        padding: 0;
       }
     }
   `;
 }
 
-// معاينة القالب
-function renderTemplatePreview(template) {
-  const preview = $("#cvTemplatePreview");
-  if (!preview) return;
+// ==============================
+// BUILD CV
+// ==============================
 
-  const names = {
-    classic: "أحمد محمد",
-    modern: "أحمد محمد",
-    minimal: "أحمد محمد"
+function buildCV(data, labels = {}) {
+  const L = {
+    title: labels.title || "Curriculum Vitae",
+    email: labels.email || "Email",
+    phone: labels.phone || "Phone",
+    address: labels.address || "Address",
+    education: labels.education || "Education",
+    experience: labels.experience || "Employment experience",
+    skills: labels.skills || "Skills",
+    languages: labels.languages || "Languages",
+    additional: labels.additional || "Additional abilities and qualities",
+    hobbies: labels.hobbies || "Hobbies"
   };
 
-  const descriptions = {
-    classic: "مهندس برمجيات",
-    modern: "مهندس برمجيات",
-    minimal: "مهندس برمجيات"
+  const photo = data.photo
+    ? `<img class="cv-photo" src="${safe(data.photo)}" alt="Profile photo">`
+    : "";
+
+  const sections = [
+    ["education", L.education],
+    ["experience", L.experience],
+    ["languages", L.languages],
+    ["additional", L.additional],
+    ["skills", L.skills],
+    ["hobbies", L.hobbies]
+  ];
+
+  const renderEntries = value => {
+    if (!value) return "";
+
+    return String(value)
+      .split(/\r?\n/)
+      .map(line => line.trim())
+      .filter(Boolean)
+      .map(line => {
+        const parts = line.split(/\s+\|\s+/, 2);
+        const hasDate = parts.length === 2;
+
+        return `
+          <div class="cv-entry">
+            <span class="cv-date">${hasDate ? safe(parts[0]) : ""}</span>
+            <span class="cv-description">${safe(hasDate ? parts[1] : line)}</span>
+          </div>
+        `;
+      })
+      .join("");
   };
 
-  preview.innerHTML = `
-    <div class="result cv-template-${template}" style="text-align:start;direction:rtl;">
-      <h2>${names[template]}</h2>
-      <h3>${descriptions[template]}</h3>
-      <hr>
-      <h3>المؤهل الدراسي</h3>
-      <p>بكالوريوس حاسبات ومعلومات</p>
-      <h3>الخبرات العملية</h3>
-      <p>خبرة في تطوير المواقع والتطبيقات.</p>
-      <h3>المهارات</h3>
-      <p>HTML - CSS - JavaScript</p>
+  return `
+    <div class="result cv-sheet">
+      <div class="cv-title">${safe(L.title)}</div>
+
+      <div class="cv-header">
+        <div class="cv-person">
+          <h2>${safe(data.name || "")}</h2>
+          <h3>${safe(data.job || "")}</h3>
+
+          <div class="cv-contact">
+            ${data.email ? `${safe(L.email)}: ${safe(data.email)}<br>` : ""}
+            ${data.phone ? `${safe(L.phone)}: ${safe(data.phone)}<br>` : ""}
+            ${data.address ? `${safe(L.address)}: ${safe(data.address)}` : ""}
+          </div>
+        </div>
+
+        ${photo}
+      </div>
+
+      ${sections.map(([key, label]) => data[key]
+        ? `
+          <section class="cv-section">
+            <h3>${safe(label)}</h3>
+            <div class="cv-entries">
+              ${renderEntries(data[key])}
+            </div>
+          </section>
+        `
+        : ""
+      ).join("")}
     </div>
   `;
 }
 
-// تحميل السيرة الذاتية بصيغة PDF
-function downloadCV(title, content, direction = "rtl", template = "classic") {
+// ==============================
+// DOWNLOAD CV
+// ==============================
+
+function downloadCV(title, content, direction = "ltr") {
   const printWindow = window.open("", "_blank");
 
   if (!printWindow) {
@@ -260,10 +444,9 @@ function downloadCV(title, content, direction = "rtl", template = "classic") {
 
   printWindow.document.write(`
     <!DOCTYPE html>
-    <html lang="${direction === "rtl" ? "ar" : "en"}" dir="${direction}">
+    <html lang="en" dir="${direction}">
     <head>
       <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>${safe(title)}</title>
 
       <style>
@@ -273,39 +456,10 @@ function downloadCV(title, content, direction = "rtl", template = "classic") {
 
         body {
           font-family: Arial, Tahoma, sans-serif;
-          direction: ${direction};
-          text-align: ${direction === "rtl" ? "right" : "left"};
+          background: #fff;
           color: #222;
-          background: white;
-          padding: 35px;
-          line-height: 1.9;
-        }
-
-        .result {
-          max-width: 800px;
-          margin: auto;
-        }
-
-        h2 {
-          text-align: center;
-          font-size: 27px;
-          margin-bottom: 5px;
-        }
-
-        h3 {
-          color: #333;
-          margin-bottom: 5px;
-        }
-
-        p {
-          white-space: pre-wrap;
-          overflow-wrap: anywhere;
-        }
-
-        hr {
-          border: 0;
-          border-top: 1px solid #ddd;
-          margin: 18px 0;
+          padding: 25px;
+          line-height: 1.65;
         }
 
         ${getCVTemplateCSS()}
@@ -323,9 +477,7 @@ function downloadCV(title, content, direction = "rtl", template = "classic") {
       </style>
     </head>
 
-    <body>
-      ${content}
-    </body>
+    <body>${content}</body>
     </html>
   `);
 
@@ -337,7 +489,10 @@ function downloadCV(title, content, direction = "rtl", template = "classic") {
   };
 }
 
-// تحويل نتيجة Gemini إلى بيانات قابلة للعرض
+// ==============================
+// PARSE TRANSLATED CV
+// ==============================
+
 function parseTranslatedCV(text) {
   if (typeof text === "object" && text !== null) {
     return text;
@@ -361,7 +516,7 @@ function parseTranslatedCV(text) {
       try {
         return JSON.parse(cleaned.slice(first, last + 1));
       } catch (e) {
-        // نعرض النص العادي إذا لم يكن JSON صالحًا.
+        // النص ليس JSON صالحًا.
       }
     }
   }
@@ -369,7 +524,10 @@ function parseTranslatedCV(text) {
   return null;
 }
 
-// عرض السيرة الذاتية المترجمة
+// ==============================
+// TRANSLATED CV
+// ==============================
+
 function renderTranslatedCV(data, originalText, targetLanguage) {
   const labels = {
     Arabic: {
@@ -382,9 +540,11 @@ function renderTranslatedCV(data, originalText, targetLanguage) {
       experience: "الخبرات العملية",
       skills: "المهارات",
       languages: "اللغات",
-      title: "السيرة الذاتية",
-      empty: "غير متوفر"
+      additional: "قدرات إضافية ومهارات",
+      hobbies: "الهوايات",
+      title: "Curriculum Vitae"
     },
+
     English: {
       name: "Full Name",
       email: "Email",
@@ -395,9 +555,11 @@ function renderTranslatedCV(data, originalText, targetLanguage) {
       experience: "Work Experience",
       skills: "Skills",
       languages: "Languages",
-      title: "Professional Resume",
-      empty: "Not provided"
+      additional: "Additional abilities and qualities",
+      hobbies: "Hobbies",
+      title: "Curriculum Vitae"
     },
+
     French: {
       name: "Nom complet",
       email: "E-mail",
@@ -408,9 +570,11 @@ function renderTranslatedCV(data, originalText, targetLanguage) {
       experience: "Expérience professionnelle",
       skills: "Compétences",
       languages: "Langues",
-      title: "Curriculum Vitae",
-      empty: "Non renseigné"
+      additional: "Compétences supplémentaires",
+      hobbies: "Loisirs",
+      title: "Curriculum Vitae"
     },
+
     German: {
       name: "Vollständiger Name",
       email: "E-Mail",
@@ -421,9 +585,11 @@ function renderTranslatedCV(data, originalText, targetLanguage) {
       experience: "Berufserfahrung",
       skills: "Fähigkeiten",
       languages: "Sprachen",
-      title: "Lebenslauf",
-      empty: "Nicht angegeben"
+      additional: "Zusätzliche Fähigkeiten",
+      hobbies: "Hobbys",
+      title: "Curriculum Vitae"
     },
+
     Spanish: {
       name: "Nombre completo",
       email: "Correo electrónico",
@@ -434,9 +600,11 @@ function renderTranslatedCV(data, originalText, targetLanguage) {
       experience: "Experiencia laboral",
       skills: "Habilidades",
       languages: "Idiomas",
-      title: "Currículum profesional",
-      empty: "No proporcionado"
+      additional: "Habilidades adicionales",
+      hobbies: "Aficiones",
+      title: "Curriculum Vitae"
     },
+
     Italian: {
       name: "Nome completo",
       email: "Email",
@@ -447,9 +615,11 @@ function renderTranslatedCV(data, originalText, targetLanguage) {
       experience: "Esperienza lavorativa",
       skills: "Competenze",
       languages: "Lingue",
-      title: "Curriculum professionale",
-      empty: "Non specificato"
+      additional: "Competenze aggiuntive",
+      hobbies: "Hobby",
+      title: "Curriculum Vitae"
     },
+
     Turkish: {
       name: "Ad Soyad",
       email: "E-posta",
@@ -460,9 +630,11 @@ function renderTranslatedCV(data, originalText, targetLanguage) {
       experience: "İş Deneyimi",
       skills: "Beceriler",
       languages: "Diller",
-      title: "Özgeçmiş",
-      empty: "Belirtilmemiş"
+      additional: "Ek beceriler",
+      hobbies: "Hobiler",
+      title: "Curriculum Vitae"
     },
+
     Russian: {
       name: "Полное имя",
       email: "Электронная почта",
@@ -473,9 +645,11 @@ function renderTranslatedCV(data, originalText, targetLanguage) {
       experience: "Опыт работы",
       skills: "Навыки",
       languages: "Языки",
-      title: "Профессиональное резюме",
-      empty: "Не указано"
+      additional: "Дополнительные навыки",
+      hobbies: "Хобби",
+      title: "Curriculum Vitae"
     },
+
     Chinese: {
       name: "姓名",
       email: "电子邮箱",
@@ -486,70 +660,49 @@ function renderTranslatedCV(data, originalText, targetLanguage) {
       experience: "工作经验",
       skills: "技能",
       languages: "语言",
-      title: "个人简历",
-      empty: "未提供"
+      additional: "其他能力",
+      hobbies: "爱好",
+      title: "Curriculum Vitae"
     }
   };
 
   const L = labels[targetLanguage] || labels.English;
 
+  if (data && typeof data === "object" && !Array.isArray(data)) {
+    data.additional =
+      data.additional ||
+      data.abilities ||
+      data.additionalAbilities ||
+      "";
+
+    data.hobbies =
+      data.hobbies ||
+      data.interests ||
+      "";
+  }
+
   if (!data || typeof data !== "object" || Array.isArray(data)) {
     return `
-      <div class="result cv-template-${currentCVTemplate}">
-        <h3>${safe(L.title)}</h3>
-        <pre style="white-space:pre-wrap;overflow-wrap:anywhere;">${safe(originalText)}</pre>
+      <div class="result cv-sheet">
+        <h2>${safe(L.title)}</h2>
+        <pre>${safe(originalText)}</pre>
       </div>
     `;
   }
 
-  const fields = [
-    ["email", "email"],
-    ["phone", "phone"],
-    ["address", "address"],
-    ["education", "education"],
-    ["experience", "experience"],
-    ["skills", "skills"],
-    ["languages", "languages"]
-  ];
-
-  const name = data.name || "";
-  const job = data.job || "";
-
-  return `
-    <div class="result cv-template-${currentCVTemplate}" style="text-align:start;line-height:1.9;">
-
-      <h2 style="text-align:center;margin-bottom:5px;">
-        ${safe(name || L.title)}
-      </h2>
-
-      ${job ? `
-        <h3 style="text-align:center;">
-          ${safe(job)}
-        </h3>
-      ` : ""}
-
-      <hr>
-
-      ${fields.map(([key, label]) => {
-        const value = data[key];
-
-        if (!value) return "";
-
-        return `
-          <section style="margin:18px 0;">
-            <h3>${safe(L[label])}</h3>
-            <p style="white-space:pre-wrap;overflow-wrap:anywhere;">
-              ${safe(value)}
-            </p>
-          </section>
-        `;
-      }).join("")}
-
-    </div>
-  `;
+  return buildCV(data, L);
 }
 
+// ==============================
+// OPEN TOOL
+// ==============================
+
 function openTool(tool) {
+  if (!mc || !modal) {
+    console.error("Modal or modalContent was not found in index.html");
+    return;
+  }
+
   const configs = {
     cv: {
       title: "إنشاء CV احترافي",
@@ -563,7 +716,9 @@ function openTool(tool) {
         ["المؤهل الدراسي", "education"],
         ["الخبرات العملية", "experience"],
         ["المهارات", "skills"],
-        ["اللغات", "languages"]
+        ["اللغات", "languages"],
+        ["القدرات الإضافية", "additional"],
+        ["الهوايات", "hobbies"]
       ]
     },
 
@@ -594,21 +749,12 @@ function openTool(tool) {
       fields: [
         ["تخمينك", "guess"]
       ]
-    },
-
-    files: {
-      title: "أدوات الملفات",
-      desc: "هنضيف أدوات PDF والصور في المرحلة التالية.",
-      fields: []
     }
   };
 
   const c = configs[tool];
-  if (!c) return;
 
-  if (tool === "cv") {
-    currentCVTemplate = "classic";
-  }
+  if (!c) return;
 
   mc.innerHTML = `
     <h2>${c.title}</h2>
@@ -617,28 +763,44 @@ function openTool(tool) {
     ${c.fields.map(([label, id]) => `
       <div class="field">
         <label>${label}</label>
-        <input
-          id="f-${id}"
-          ${["experience", "skills", "education", "languages"].includes(id) ? 'placeholder="اكتب هنا..."' : ""}
-          ${["age", "weight", "height", "amount", "down", "months", "guess"].includes(id) ? 'type="number"' : ""}
-        >
+
+        ${[
+          "experience",
+          "skills",
+          "education",
+          "languages",
+          "additional",
+          "hobbies"
+        ].includes(id)
+          ? `
+            <textarea
+              id="f-${id}"
+              rows="3"
+              placeholder="كل سطر في سطر منفصل. وللتاريخ اكتب: التاريخ | التفاصيل"
+            ></textarea>
+          `
+          : `
+            <input
+              id="f-${id}"
+              ${[
+                "age",
+                "weight",
+                "height",
+                "amount",
+                "down",
+                "months",
+                "guess"
+              ].includes(id) ? 'type="number"' : ""}
+            >
+          `
+        }
       </div>
     `).join("")}
 
     ${tool === "cv" ? `
       <div class="field">
-        <label>اختر قالب السيرة الذاتية:</label>
-
-        <select id="cvTemplate">
-          <option value="classic">القالب الكلاسيكي</option>
-          <option value="modern">القالب العصري</option>
-          <option value="minimal">القالب البسيط</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>معاينة القالب:</label>
-        <div id="cvTemplatePreview"></div>
+        <label>الصورة الشخصية (اختياري):</label>
+        <input id="f-photo" type="file" accept="image/*">
       </div>
 
       <div class="field">
@@ -665,32 +827,17 @@ function openTool(tool) {
     ` : ""}
 
     <button class="primary-btn" id="toolRun">تنفيذ</button>
+
     <div id="toolResult"></div>
   `;
 
   modal.classList.remove("hidden");
 
-  // اختيار القالب وتحديث المعاينة
+  // ============================
+  // CV TRANSLATION
+  // ============================
+
   if (tool === "cv") {
-    renderTemplatePreview(currentCVTemplate);
-
-    $("#cvTemplate").onchange = () => {
-      currentCVTemplate = $("#cvTemplate").value;
-      renderTemplatePreview(currentCVTemplate);
-
-      // تحديث القالب في النتائج الموجودة
-      $$("#toolResult .result, #cvTranslationResult .result").forEach(result => {
-        result.classList.remove(
-          "cv-template-classic",
-          "cv-template-modern",
-          "cv-template-minimal"
-        );
-
-        result.classList.add("cv-template-" + currentCVTemplate);
-      });
-    };
-
-    // ترجمة السيرة الذاتية
     $("#translateCV").onclick = async () => {
       const cvData = {
         name: $("#f-name").value.trim(),
@@ -701,7 +848,9 @@ function openTool(tool) {
         education: $("#f-education").value.trim(),
         experience: $("#f-experience").value.trim(),
         skills: $("#f-skills").value.trim(),
-        languages: $("#f-languages").value.trim()
+        languages: $("#f-languages").value.trim(),
+        additional: $("#f-additional").value.trim(),
+        hobbies: $("#f-hobbies").value.trim()
       };
 
       const targetLanguage = $("#cvLanguage").value;
@@ -747,6 +896,23 @@ function openTool(tool) {
         const translatedText = data.translatedCV || "";
         const translatedData = parseTranslatedCV(translatedText);
 
+        if (translatedData && typeof translatedData === "object") {
+          const photoFile = $("#f-photo")?.files?.[0];
+
+          if (photoFile) {
+            translatedData.photo = await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = () => reject(
+                new Error("تعذر قراءة الصورة الشخصية.")
+              );
+
+              reader.readAsDataURL(photoFile);
+            });
+          }
+        }
+
         resultBox.innerHTML = `
           ${renderTranslatedCV(
             translatedData,
@@ -766,8 +932,7 @@ function openTool(tool) {
             downloadCV(
               "Translated CV",
               cvContent.outerHTML,
-              targetLanguage === "Arabic" ? "rtl" : "ltr",
-              currentCVTemplate
+              targetLanguage === "Arabic" ? "rtl" : "ltr"
             );
           }
         };
@@ -785,7 +950,10 @@ function openTool(tool) {
     };
   }
 
-  // تنفيذ الأدوات
+  // ============================
+  // RUN TOOLS
+  // ============================
+
   $("#toolRun").onclick = () => {
     let out = "";
 
@@ -795,7 +963,9 @@ function openTool(tool) {
       const m = +$("#f-months").value;
 
       out = a > 0 && d >= 0 && d < a && m > 0
-        ? `القسط الشهري: ${((a - d) / m).toLocaleString("ar-EG", { maximumFractionDigits: 2 })} جنيه`
+        ? `القسط الشهري: ${((a - d) / m).toLocaleString("ar-EG", {
+            maximumFractionDigits: 2
+          })} جنيه`
         : "راجع المبلغ والمقدم وعدد الشهور.";
     }
 
@@ -813,7 +983,11 @@ function openTool(tool) {
           10 * w + 6.25 * h - 5 * age +
           (isMale ? 5 : -161);
 
-        out = `معدل الأيض الأساسي التقريبي: ${Math.round(base)} سعرة يوميًا. احتياجك الفعلي يتغير حسب النشاط وعوامل أخرى.`;
+        out = `
+          معدل الأيض الأساسي التقريبي:
+          ${Math.round(base)} سعرة يوميًا.
+          احتياجك الفعلي يتغير حسب النشاط وعوامل أخرى.
+        `;
       } else {
         out = "من فضلك املأ البيانات بأرقام صحيحة.";
       }
@@ -829,38 +1003,75 @@ function openTool(tool) {
     }
 
     else if (tool === "cv") {
-      const name = $("#f-name").value.trim();
-      const email = $("#f-email").value.trim();
-      const phone = $("#f-phone").value.trim();
-      const address = $("#f-address").value.trim();
-      const job = $("#f-job").value.trim();
-      const education = $("#f-education").value.trim();
-      const experience = $("#f-experience").value.trim();
-      const skills = $("#f-skills").value.trim();
-      const languages = $("#f-languages").value.trim();
+      const cvData = {
+        name: $("#f-name").value.trim(),
+        email: $("#f-email").value.trim(),
+        phone: $("#f-phone").value.trim(),
+        address: $("#f-address").value.trim(),
+        job: $("#f-job").value.trim(),
+        education: $("#f-education").value.trim(),
+        experience: $("#f-experience").value.trim(),
+        skills: $("#f-skills").value.trim(),
+        languages: $("#f-languages").value.trim(),
+        additional: $("#f-additional").value.trim(),
+        hobbies: $("#f-hobbies").value.trim()
+      };
 
-      if (!name || !job) {
+      if (!cvData.name || !cvData.job) {
         out = "من فضلك اكتب الاسم والمسمى الوظيفي على الأقل.";
       } else {
-        out = `
-          <div class="result cv-template-${currentCVTemplate}">
-            <h2>${safe(name)}</h2>
-            <h3>${safe(job)}</h3>
-            <hr>
-            <p><strong>البريد الإلكتروني:</strong> ${safe(email)}</p>
-            <p><strong>رقم الهاتف:</strong> ${safe(phone)}</p>
-            <p><strong>العنوان:</strong> ${safe(address)}</p>
-            <hr>
-            <h3>المؤهل الدراسي</h3>
-            <p>${safe(education)}</p>
-            <h3>الخبرات العملية</h3>
-            <p>${safe(experience)}</p>
-            <h3>المهارات</h3>
-            <p>${safe(skills)}</p>
-            <h3>اللغات</h3>
-            <p>${safe(languages)}</p>
-          </div>
-        `;
+        const file = $("#f-photo")?.files?.[0];
+
+        const showCV = (photo = "") => {
+          cvData.photo = photo;
+
+          $("#toolResult").innerHTML = `
+            ${buildCV(cvData, {
+              title: "Curriculum Vitae",
+              email: "e-mail",
+              phone: "Phone",
+              address: "Website / Address",
+              education: "Education",
+              experience: "Employment experience",
+              languages: "Languages",
+              additional: "Additional abilities and qualities",
+              skills: "Skills",
+              hobbies: "Hobbies"
+            })}
+
+            <button class="primary-btn" id="downloadOriginalCV">
+              تحميل PDF
+            </button>
+          `;
+
+          $("#downloadOriginalCV").onclick = () => {
+            const cvContent = $("#toolResult .result");
+
+            if (cvContent) {
+              downloadCV(
+                "My CV",
+                cvContent.outerHTML,
+                "ltr"
+              );
+            }
+          };
+        };
+
+        if (file) {
+          const reader = new FileReader();
+
+          reader.onload = () => showCV(reader.result);
+
+          reader.onerror = () => {
+            $("#toolResult").textContent =
+              "تعذر قراءة الصورة الشخصية.";
+          };
+
+          reader.readAsDataURL(file);
+          return;
+        }
+
+        showCV();
       }
     }
 
@@ -868,33 +1079,23 @@ function openTool(tool) {
       out = "قريبًا هنضيف أدوات الملفات هنا.";
     }
 
-    if (tool === "cv" && out.includes('class="result')) {
-      $("#toolResult").innerHTML = `
-        ${out}
-
-        <button class="primary-btn" id="downloadOriginalCV">
-          تحميل PDF
-        </button>
-      `;
-
-      $("#downloadOriginalCV").onclick = () => {
-        const cvContent = $("#toolResult .result");
-
-        if (cvContent) {
-          downloadCV(
-            "My CV",
-            cvContent.outerHTML,
-            "rtl",
-            currentCVTemplate
-          );
-        }
-      };
-    } else {
-      $("#toolResult").innerHTML = out;
+    if (tool !== "cv" || out) {
+      $("#toolResult").textContent = out;
     }
   };
 }
 
+// ==============================
+// OPEN BASIC TOOLS
+// ==============================
+
 $$("[data-tool]").forEach(b => {
-  b.addEventListener("click", () => openTool(b.dataset.tool));
+  b.addEventListener("click", e => {
+    e.preventDefault();
+    openTool(b.dataset.tool);
+  });
 });
+
+// ملاحظة:
+// تشغيل الأدوات الجديدة مسؤولية extra-tools.js فقط.
+// لا تضف هنا مستمعًا آخر لـ data-extra-tool.

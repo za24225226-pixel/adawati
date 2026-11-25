@@ -1,101 +1,337 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#111827">
+  <meta name="theme-color" content="#030b2b">
   <title>أدواتي | Adawati</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
 </head>
-<body>
+
+<body class="dark">
   <div class="app-shell">
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <div class="brand-mark">A<span>✦</span></div>
-        <div><strong>أدواتي</strong><small>ADAWATI</small></div>
+
+    <header class="topbar">
+      <a class="brand" href="#" data-page="home">
+        <span class="brand-mark">
+          <span class="brand-grid">▦</span>
+          <span class="brand-letter">A</span>
+        </span>
+        <span class="brand-name">
+          <strong>أدواتي</strong>
+          <small>Adawati</small>
+        </span>
+      </a>
+
+      <nav class="main-nav">
+        <button class="nav-item active" data-page="home">
+          <span>⌂</span>
+          <b data-ar="الرئيسية" data-en="Home">الرئيسية</b>
+        </button>
+        <button class="nav-item" data-page="tools">
+          <b data-ar="كل الأدوات" data-en="All tools">كل الأدوات</b>
+          <span>▦</span>
+        </button>
+      </nav>
+
+      <div class="top-actions">
+        <button class="top-btn" id="themeBtn">
+          <span id="themeIcon">☾</span>
+          <b data-ar="الوضع الليلي" data-en="Dark mode">الوضع الليلي</b>
+        </button>
+
+        <button class="top-btn language-btn" id="langBtn">
+          <span>◎</span>
+          <b>English</b>
+          <span>⌄</span>
+        </button>
+
+        <button class="logout-btn" id="logoutBtn">
+          <span>⇥</span>
+          <b data-ar="تسجيل الخروج" data-en="Sign out">تسجيل الخروج</b>
+        </button>
       </div>
-
-      <div class="side-label" data-ar="القائمة الرئيسية" data-en="MAIN MENU">القائمة الرئيسية</div>
-      <button class="nav-item active" data-page="home"><span>⌂</span><b data-ar="الرئيسية" data-en="Home">الرئيسية</b></button>
-      <button class="nav-item" data-page="tools"><span>▦</span><b data-ar="كل الأدوات" data-en="All tools">كل الأدوات</b></button>
-      <button class="nav-item" data-page="saved"><span>♡</span><b data-ar="المفضلة" data-en="Favorites">المفضلة</b></button>
-
-      <div class="side-spacer"></div>
-
-      <div class="sidebar-bottom">
-        <button class="nav-item" id="themeBtn"><span>◐</span><b data-ar="الوضع الليلي" data-en="Dark mode">الوضع الليلي</b></button>
-        <button class="nav-item" id="langBtn"><span>文</span><b>English</b></button>
-        <a class="nav-item support" href="https://wa.me/48729754651" target="_blank" rel="noopener"><span>☏</span><b data-ar="تواصل مع الدعم" data-en="Contact support">تواصل مع الدعم</b></a>
-        <button class="nav-item logout" id="logoutBtn"><span>↪</span><b data-ar="تسجيل الخروج" data-en="Sign out">تسجيل الخروج</b></button>
-      </div>
-    </aside>
+    </header>
 
     <main class="main">
-      <header class="topbar">
-        <button class="icon-btn menu-btn" id="menuBtn" aria-label="القائمة">☰</button>
-        <div class="breadcrumb"><span data-ar="مساحتك الذكية" data-en="Your smart space">مساحتك الذكية</span><span class="crumb-dot">/</span><b id="pageTitle">الرئيسية</b></div>
-        <div class="top-actions"><span class="status-dot"></span><span class="online-text" data-ar="كل أدواتك في مكان واحد" data-en="All your tools in one place">كل أدواتك في مكان واحد</span><div class="avatar">Z</div></div>
-      </header>
 
-      <section class="content" id="homePage">
-        <div class="hero">
-          <div class="hero-glow"></div>
+      <!-- HOME PAGE -->
+      <section class="page-content" id="homePage">
+
+        <section class="hero">
+          <div class="hero-decoration decoration-one"></div>
+          <div class="hero-decoration decoration-two"></div>
+          <div class="hero-decoration decoration-three"></div>
+
           <div class="hero-copy">
-            <div class="eyebrow"><span>✦</span> YOUR SMART TOOLKIT</div>
-            <h1 data-ar="كل اللي تحتاجه،<br>في مكان واحد." data-en="Everything you need,<br>in one place.">كل اللي تحتاجه،<br>في مكان واحد.</h1>
-            <p data-ar="أهلاً بيك في أدواتي. أنجز أسرع باستخدام مجموعة أدواتنا المتنوعة." data-en="Welcome to Adawati. Get things done faster with our collection of useful tools.">أهلاً بيك في أدواتي. أنجز أسرع باستخدام مجموعة أدواتنا المتنوعة.</p>
-            <button class="primary-btn" data-page="tools" data-ar="اكتشف الأدوات" data-en="Explore tools">اكتشف الأدوات <span>←</span></button>
+            <h1>
+              <span data-ar="مرحباً بك في" data-en="Welcome to">مرحباً بك في</span>
+              <strong data-ar="أدواتي" data-en="Adawati">أدواتي</strong>
+            </h1>
+
+            <h2 data-ar="منصة شاملة لأفضل الأدوات والخدمات المجانية"
+                data-en="Your platform for the best free tools and services">
+              منصة شاملة لأفضل الأدوات والخدمات المجانية
+            </h2>
+
+            <div class="hero-description">
+              <span>⚡</span>
+              <p data-ar="أنشئ - احسب - ترجم - العب ... كل ما تحتاجه في مكان واحد!"
+                 data-en="Create - Calculate - Translate - Play ... Everything you need in one place!">
+                أنشئ - احسب - ترجم - العب ... كل ما تحتاجه في مكان واحد!
+              </p>
+            </div>
+
+            <div class="hero-buttons">
+              <button class="primary-btn" data-page="tools">
+                <span>🚀</span>
+                <b data-ar="ابدأ الآن" data-en="Get started">ابدأ الآن</b>
+              </button>
+              <button class="outline-btn" data-page="tools">
+                <b data-ar="اكتشف الأدوات" data-en="Explore tools">اكتشف الأدوات</b>
+                <span>▶</span>
+              </button>
+            </div>
           </div>
-          <div class="hero-art">
+
+          <div class="hero-art" aria-hidden="true">
             <div class="orbit orbit-one"></div>
             <div class="orbit orbit-two"></div>
-            <div class="ai-core"><span>✦</span><b>A</b><small>TOOLS</small></div>
-            <div class="float-chip chip-one">✧ Smart</div>
-            <div class="float-chip chip-two">⚡ Fast</div>
-            <div class="float-chip chip-three">∞ Ideas</div>
+            <div class="orbit orbit-three"></div>
+
+            <div class="toolbox">
+              <div class="toolbox-handle"></div>
+              <div class="toolbox-screen">
+                <div class="app-icon cv-icon">CV</div>
+                <div class="app-icon calc-icon">▦</div>
+                <div class="app-icon game-icon">🎮</div>
+                <div class="app-icon folder-icon">📁</div>
+                <div class="app-icon image-icon">▧</div>
+                <div class="app-icon wrench-icon">🔧</div>
+              </div>
+              <div class="toolbox-lock"></div>
+              <div class="toolbox-logo">A</div>
+            </div>
+
+            <span class="spark spark-one">✦</span>
+            <span class="spark spark-two">✧</span>
+            <span class="spark spark-three">✦</span>
+            <span class="spark spark-four">✧</span>
+          </div>
+        </section>
+
+        <section class="featured-section">
+          <div class="section-title">
+            <span></span>
+            <h2 data-ar="أدواتنا المميزة" data-en="Our featured tools">أدواتنا المميزة</h2>
+            <b>★</b>
+            <span></span>
+          </div>
+
+          <p class="section-subtitle"
+             data-ar="مجموعة أدوات قوية وسهلة الاستخدام"
+             data-en="A collection of powerful and easy-to-use tools">
+            مجموعة أدوات قوية وسهلة الاستخدام
+          </p>
+
+          <div class="featured-grid">
+
+            <button class="feature-card feature-games" data-tool="games">
+              <span class="feature-icon">🎮</span>
+              <span class="feature-watermark">🎮</span>
+              <h3 data-ar="الألعاب" data-en="Games">الألعاب</h3>
+              <p data-ar="استمتع بألعاب ممتعة ومسلية"
+                 data-en="Enjoy fun and entertaining games">
+                استمتع بألعاب ممتعة ومسلية
+              </p>
+              <span class="feature-action" data-ar="ابدأ الآن ▶" data-en="Start now ▶">ابدأ الآن ▶</span>
+            </button>
+
+            <button class="feature-card feature-installments" data-tool="installments">
+              <span class="feature-icon">▦</span>
+              <span class="feature-watermark">▦</span>
+              <h3 data-ar="حساب الأقساط" data-en="Installments">حساب الأقساط</h3>
+              <p data-ar="احسب القسط الشهري بسهولة"
+                 data-en="Calculate your monthly payment easily">
+                احسب القسط الشهري بسهولة
+              </p>
+              <span class="feature-action" data-ar="ابدأ الآن ▶" data-en="Start now ▶">ابدأ الآن ▶</span>
+            </button>
+
+            <button class="feature-card feature-calories" data-tool="calories">
+              <span class="feature-icon">♨</span>
+              <span class="feature-watermark">♧</span>
+              <h3 data-ar="قياس السعرات" data-en="Calories">قياس السعرات</h3>
+              <p data-ar="اعرف احتياجك من السعرات"
+                 data-en="Know your daily calorie needs">
+                اعرف احتياجك من السعرات
+              </p>
+              <span class="feature-action" data-ar="ابدأ الآن ▶" data-en="Start now ▶">ابدأ الآن ▶</span>
+            </button>
+
+            <button class="feature-card feature-cv" data-tool="cv">
+              <span class="feature-icon">▤</span>
+              <span class="feature-watermark">▤</span>
+              <h3 data-ar="إنشاء CV" data-en="CV Builder">إنشاء CV</h3>
+              <p data-ar="اصنع سيرتك الذاتية باحترافية"
+                 data-en="Build your professional CV">
+                اصنع سيرتك الذاتية باحترافية
+              </p>
+              <span class="feature-action" data-ar="ابدأ الآن ▶" data-en="Start now ▶">ابدأ الآن ▶</span>
+            </button>
+
+            <button class="feature-card feature-files" data-page="tools">
+              <span class="feature-icon">📁</span>
+              <span class="feature-watermark">📂</span>
+              <h3 data-ar="أدوات الملفات" data-en="File tools">أدوات الملفات</h3>
+              <p data-ar="أدوات PDF والصور والمزيد"
+                 data-en="PDF, image tools and more">
+                أدوات PDF والصور والمزيد
+              </p>
+              <span class="feature-action" data-ar="ابدأ الآن ▶" data-en="Start now ▶">ابدأ الآن ▶</span>
+            </button>
+
+          </div>
+        </section>
+
+        <footer class="footer">
+          <div class="social-links">
+            <a href="#" aria-label="YouTube">▶</a>
+            <a href="#" aria-label="Facebook">f</a>
+            <a href="#" aria-label="Twitter">♥</a>
+            <a href="#" aria-label="Telegram">➤</a>
+            <a href="#" aria-label="GitHub">●</a>
+          </div>
+
+          <p data-ar="مع ❤️ من فريق أدواتي" data-en="Made with ❤️ by Adawati Team">
+            مع ❤️ من فريق أدواتي
+          </p>
+
+          <div class="footer-links">
+            <a href="#" data-ar="حول الموقع" data-en="About">حول الموقع</a>
+            <span>|</span>
+            <a href="#" data-ar="سياسة الخصوصية" data-en="Privacy Policy">سياسة الخصوصية</a>
+            <span>|</span>
+            <a href="https://wa.me/48729754651" target="_blank" rel="noopener"
+               data-ar="تواصل معنا" data-en="Contact us">تواصل معنا</a>
+          </div>
+        </footer>
+      </section>
+
+      <!-- ALL TOOLS PAGE -->
+      <section class="page-content hidden content-page" id="toolsPage">
+        <div class="page-heading">
+          <div>
+            <span class="section-kicker">ADAWATI TOOLBOX</span>
+            <h1 data-ar="كل الأدوات" data-en="All tools">كل الأدوات</h1>
+            <p data-ar="اختار الأداة المناسبة وابدأ شغلك."
+               data-en="Choose the right tool and get started.">
+              اختار الأداة المناسبة وابدأ شغلك.
+            </p>
           </div>
         </div>
 
-        <div class="section-heading">
-          <div><span class="eyebrow muted" data-ar="ابدأ من هنا" data-en="GET STARTED">ابدأ من هنا</span><h2 data-ar="أدواتك المفضلة" data-en="Your favorite tools">أدواتك المفضلة</h2></div>
-          <button class="text-btn" data-page="tools" data-ar="عرض كل الأدوات ←" data-en="View all tools →">عرض كل الأدوات ←</button>
+        <div class="tool-search">
+          <span>⌕</span>
+          <input id="toolSearch" type="search"
+                 placeholder="ابحث عن أداة..."
+                 data-ar-placeholder="ابحث عن أداة..."
+                 data-en-placeholder="Search for a tool...">
         </div>
 
-        <div class="tools-grid">
-          <button class="tool-card" data-tool="cv"><span class="tool-icon purple">▤</span><span class="tool-arrow">↗</span><h3 data-ar="إنشاء CV" data-en="Create a CV">إنشاء CV</h3><p data-ar="اعمل سيرة ذاتية احترافية بمساعدة الذكاء الاصطناعي." data-en="Build a professional resume with AI.">اعمل سيرة ذاتية احترافية بمساعدة الذكاء الاصطناعي.</p><span class="tool-foot">AI POWERED <i>✦</i></span></button>
-          <button class="tool-card" data-tool="calories"><span class="tool-icon green">♧</span><span class="tool-arrow">↗</span><h3 data-ar="قياس السعرات" data-en="Calorie calculator">قياس السعرات</h3><p data-ar="تابع سعراتك اليومية بطريقة بسيطة." data-en="Track your daily calories simply.">تابع سعراتك اليومية بطريقة بسيطة.</p><span class="tool-foot" data-ar="صحتك تهمنا" data-en="YOUR WELLNESS">صحتك تهمنا</span></button>
-          <button class="tool-card" data-tool="installments"><span class="tool-icon orange">＄</span><span class="tool-arrow">↗</span><h3 data-ar="حساب الأقساط" data-en="Installment calculator">حساب الأقساط</h3><p data-ar="احسب القسط الشهري واعرف التزاماتك." data-en="Calculate monthly payments with ease.">احسب القسط الشهري واعرف التزاماتك.</p><span class="tool-foot" data-ar="حسابات سهلة" data-en="EASY CALCULATIONS">حسابات سهلة</span></button>
-          <button class="tool-card" data-tool="games"><span class="tool-icon pink">⌘</span><span class="tool-arrow">↗</span><h3 data-ar="الألعاب" data-en="Games">الألعاب</h3><p data-ar="استمتع بألعاب خفيفة وتحديات ممتعة." data-en="Enjoy quick games and fun challenges.">استمتع بألعاب خفيفة وتحديات ممتعة.</p><span class="tool-foot" data-ar="وقت ممتع" data-en="HAVE FUN">وقت ممتع</span></button>
-        </div>
+        <section class="tool-category">
+          <div class="category-heading"><h2 data-ar="الأدوات الأساسية" data-en="Essential tools">الأدوات الأساسية</h2></div>
+          <div class="tools-grid">
+            <button class="tool-card" data-tool="cv"><span class="tool-icon purple">▤</span><h3 data-ar="إنشاء CV" data-en="CV Builder">إنشاء CV</h3><p data-ar="إنشاء وتحميل سيرة ذاتية." data-en="Create and download a CV.">إنشاء وتحميل سيرة ذاتية.</p></button>
+            <button class="tool-card" data-tool="calories"><span class="tool-icon green">♧</span><h3 data-ar="قياس السعرات" data-en="Calories">قياس السعرات</h3><p data-ar="حساب السعرات اليومية." data-en="Calculate daily calories.">حساب السعرات اليومية.</p></button>
+            <button class="tool-card" data-tool="installments"><span class="tool-icon orange">＄</span><h3 data-ar="حساب الأقساط" data-en="Installments">حساب الأقساط</h3><p data-ar="حساب القسط الشهري." data-en="Calculate monthly payments.">حساب القسط الشهري.</p></button>
+            <button class="tool-card" data-tool="games"><span class="tool-icon pink">🎮</span><h3 data-ar="الألعاب" data-en="Games">الألعاب</h3><p data-ar="تحديات وألعاب خفيفة." data-en="Fun games and challenges.">تحديات وألعاب خفيفة.</p></button>
+          </div>
+        </section>
 
-        <footer>© 2026 ADAWATI <span>صُنع بكل اهتمام <b>♥</b></span></footer>
+        <section class="tool-category">
+          <div class="category-heading"><h2 data-ar="أدوات الصور" data-en="Image tools">أدوات الصور</h2></div>
+          <div class="tools-grid">
+            <button class="tool-card" data-extra-tool="image-compress"><span class="tool-icon blue">⇩</span><h3 data-ar="ضغط الصور" data-en="Compress images">ضغط الصور</h3><p data-ar="تقليل حجم الصورة." data-en="Reduce image file size.">تقليل حجم الصورة.</p></button>
+            <button class="tool-card" data-extra-tool="image-resize"><span class="tool-icon purple">↔</span><h3 data-ar="تغيير مقاس الصورة" data-en="Resize image">تغيير مقاس الصورة</h3><p data-ar="تغيير العرض والارتفاع." data-en="Change width and height.">تغيير العرض والارتفاع.</p></button>
+            <button class="tool-card" data-extra-tool="image-convert"><span class="tool-icon green">⇄</span><h3 data-ar="تحويل صيغ الصور" data-en="Convert image">تحويل صيغ الصور</h3><p data-ar="حوّل بين PNG وJPG وWebP." data-en="Convert PNG, JPG and WebP.">حوّل بين PNG وJPG وWebP.</p></button>
+          </div>
+        </section>
+
+        <section class="tool-category">
+          <div class="category-heading"><h2 data-ar="أدوات PDF" data-en="PDF tools">أدوات PDF</h2></div>
+          <div class="tools-grid">
+            <button class="tool-card" data-extra-tool="images-pdf"><span class="tool-icon pink">▧</span><h3 data-ar="صور إلى PDF" data-en="Images to PDF">صور إلى PDF</h3><p data-ar="اجمع الصور في ملف PDF." data-en="Combine images into a PDF.">اجمع الصور في ملف PDF.</p></button>
+            <button class="tool-card" data-extra-tool="pdf-merge"><span class="tool-icon blue">⊕</span><h3 data-ar="دمج PDF" data-en="Merge PDF">دمج PDF</h3><p data-ar="ادمج أكثر من ملف PDF." data-en="Merge PDF files.">ادمج أكثر من ملف PDF.</p></button>
+            <button class="tool-card" data-extra-tool="pdf-split"><span class="tool-icon orange">✂</span><h3 data-ar="تقسيم PDF" data-en="Split PDF">تقسيم PDF</h3><p data-ar="استخرج صفحات محددة." data-en="Extract selected pages.">استخرج صفحات محددة.</p></button>
+          </div>
+        </section>
+
+        <section class="tool-category">
+          <div class="category-heading"><h2 data-ar="أدوات المطورين" data-en="Developer tools">أدوات المطورين</h2></div>
+          <div class="tools-grid">
+            <button class="tool-card" data-extra-tool="qr"><span class="tool-icon purple">▦</span><h3 data-ar="مولّد QR Code" data-en="QR Generator">مولّد QR Code</h3><p data-ar="أنشئ رمز QR للنصوص والروابط." data-en="Create QR codes.">أنشئ رمز QR للنصوص والروابط.</p></button>
+            <button class="tool-card" data-extra-tool="json"><span class="tool-icon blue">{ }</span><h3>JSON Formatter</h3><p data-ar="تنسيق وفحص JSON." data-en="Format and validate JSON.">تنسيق وفحص JSON.</p></button>
+            <button class="tool-card" data-extra-tool="password"><span class="tool-icon green">⌑</span><h3 data-ar="مولّد كلمات مرور" data-en="Password Generator">مولّد كلمات مرور</h3><p data-ar="أنشئ كلمة مرور قوية." data-en="Generate a strong password.">أنشئ كلمة مرور قوية.</p></button>
+            <button class="tool-card" data-extra-tool="base64"><span class="tool-icon orange">⌘</span><h3>Base64</h3><p data-ar="ترميز وفك ترميز النصوص." data-en="Encode and decode text.">ترميز وفك ترميز النصوص.</p></button>
+          </div>
+        </section>
+
+        <section class="tool-category">
+          <div class="category-heading"><h2 data-ar="أدوات الدراسة" data-en="Study tools">أدوات الدراسة</h2></div>
+          <div class="tools-grid">
+            <button class="tool-card" data-extra-tool="pomodoro"><span class="tool-icon pink">◷</span><h3 data-ar="مؤقت التركيز" data-en="Focus timer">مؤقت التركيز</h3><p data-ar="جلسات تركيز واستراحة." data-en="Focus and break sessions.">جلسات تركيز واستراحة.</p></button>
+            <button class="tool-card" data-extra-tool="gpa"><span class="tool-icon blue">∑</span><h3 data-ar="حساب المعدل" data-en="GPA calculator">حساب المعدل</h3><p data-ar="احسب متوسط درجاتك." data-en="Calculate your GPA.">احسب متوسط درجاتك.</p></button>
+            <button class="tool-card" data-extra-tool="tasks"><span class="tool-icon green">☑</span><h3 data-ar="قائمة المهام" data-en="Task list">قائمة المهام</h3><p data-ar="نظّم مهامك اليومية." data-en="Organize your tasks.">نظّم مهامك اليومية.</p></button>
+          </div>
+        </section>
+
+        <section class="tool-category">
+          <div class="category-heading"><h2 data-ar="أدوات المال والحسابات" data-en="Finance tools">أدوات المال والحسابات</h2></div>
+          <div class="tools-grid">
+            <button class="tool-card" data-extra-tool="discount"><span class="tool-icon orange">٪</span><h3 data-ar="حساب الخصم" data-en="Discount calculator">حساب الخصم</h3><p data-ar="اعرف السعر بعد الخصم." data-en="Calculate discounted price.">اعرف السعر بعد الخصم.</p></button>
+            <button class="tool-card" data-extra-tool="percentage"><span class="tool-icon purple">％</span><h3 data-ar="النسبة المئوية" data-en="Percentage calculator">النسبة المئوية</h3><p data-ar="احسب النسب بسهولة." data-en="Calculate percentages.">احسب النسب بسهولة.</p></button>
+            <button class="tool-card" data-extra-tool="currency"><span class="tool-icon green">⇄</span><h3 data-ar="تحويل العملات" data-en="Currency converter">تحويل العملات</h3><p data-ar="حوّل العملات." data-en="Convert currencies.">حوّل العملات.</p></button>
+          </div>
+        </section>
       </section>
 
-      <section class="content hidden" id="toolsPage">
-        <div class="page-intro"><span class="eyebrow muted">ADAWATI TOOLBOX</span><h1 data-ar="كل الأدوات" data-en="All tools">كل الأدوات</h1><p data-ar="اختار الأداة اللي تساعدك تنجز." data-en="Choose the tool that helps you get things done.">اختار الأداة اللي تساعدك تنجز.</p></div>
-        <div class="tools-grid">
-          <button class="tool-card" data-tool="cv"><span class="tool-icon purple">▤</span><h3>إنشاء CV</h3><p>سيرة ذاتية احترافية.</p></button>
-          <button class="tool-card" data-tool="calories"><span class="tool-icon green">♧</span><h3>قياس السعرات</h3><p>حساب السعرات اليومية.</p></button>
-          <button class="tool-card" data-tool="installments"><span class="tool-icon orange">＄</span><h3>حساب الأقساط</h3><p>اعرف قيمة القسط الشهري.</p></button>
-          <button class="tool-card" data-tool="games"><span class="tool-icon pink">⌘</span><h3>الألعاب</h3><p>ألعاب وتحديات خفيفة.</p></button>
-          <button class="tool-card" data-tool="files"><span class="tool-icon blue">▧</span><h3>أدوات الملفات</h3><p>مساحة مخصصة لأدوات PDF والصور — قريبًا.</p></button>
+      <!-- FAVORITES PAGE -->
+      <section class="page-content hidden content-page" id="savedPage">
+        <div class="page-heading">
+          <div>
+            <h1 data-ar="المفضلة" data-en="Favorites">المفضلة</h1>
+            <p data-ar="أدواتك المحفوظة هتظهر هنا." data-en="Your saved tools will appear here.">أدواتك المحفوظة هتظهر هنا.</p>
+          </div>
         </div>
-      </section>
-
-      <section class="content hidden" id="savedPage">
-        <div class="page-intro"><span class="eyebrow muted">YOUR COLLECTION</span><h1 data-ar="المفضلة" data-en="Favorites">المفضلة</h1><p data-ar="الأدوات اللي بتحب ترجع لها هتلاقيها هنا." data-en="Your saved tools will appear here.">الأدوات اللي بتحب ترجع لها هتلاقيها هنا.</p></div>
-        <div class="empty-state">♡<h3 data-ar="لسه مفيش عناصر محفوظة" data-en="Nothing saved yet">لسه مفيش عناصر محفوظة</h3><p data-ar="احفظ أدواتك المفضلة عشان توصل لها بسرعة." data-en="Save your favorite tools for quick access.">احفظ أدواتك المفضلة عشان توصل لها بسرعة.</p></div>
+        <div class="empty-state">
+          <div class="empty-icon">♡</div>
+          <h3 data-ar="لسه مفيش عناصر محفوظة" data-en="No saved items yet">لسه مفيش عناصر محفوظة</h3>
+          <p data-ar="اكتشف الأدوات وابدأ استخدامها." data-en="Explore the tools and start using them.">اكتشف الأدوات وابدأ استخدامها.</p>
+          <button class="primary-btn" data-page="tools" data-ar="اكتشف الأدوات" data-en="Explore tools">اكتشف الأدوات</button>
+        </div>
       </section>
 
       <div class="toast" id="toast"></div>
     </main>
   </div>
 
-  <div class="modal-backdrop hidden" id="modal"><div class="modal"><button class="modal-close" id="modalClose">×</button><div id="modalContent"></div></div></div>
+  <!-- TOOL MODAL -->
+  <div class="modal-backdrop hidden" id="modal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">×</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="/app.js"></script>
+  <script src="/extra-tools.js"></script>
 </body>
 </html>
